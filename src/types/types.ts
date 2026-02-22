@@ -1,0 +1,10 @@
+export type RenderVariant =
+  | 'primary'
+  | 'secondary'
+  | 'ghost'
+  | 'mono'
+  | 'bool-true'
+  | 'bool-false'
+  | 'badge-green'
+  | 'badge-accent'
+  | 'accent'

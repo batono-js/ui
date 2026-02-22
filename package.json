@@ -1,0 +1,66 @@
+{
+  "name": "@batono/ui",
+  "version": "0.0.5",
+  "description": "UI primitives for the Batono server-driven interaction protocol.",
+  "license": "MIT",
+  "author": "Pascal Pfeifer <pascal@pfeifer.zone>",
+  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "ui-dsl",
+    "ui-primitives",
+    "layout-system",
+    "json-ui",
+    "server-driven-ui",
+    "interaction-nodes",
+    "typed-ui",
+    "ui-definition",
+    "backend-ui",
+    "frontend-agnostic",
+    "typescript",
+    "batono"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/batono-js/ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/batono-js/ui/issues"
+  },
+  "homepage": "https://github.com/batono-js/ui#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prepublishOnly": "npm test",
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf dist",
+    "test": "npm run build && node --test",
+    "test:coverage": "npm run build && node --test --experimental-test-coverage --test-coverage-exclude='test/**'",
+    "test:coverage:c8": "npm run build && npx c8 node --test",
+    "test:coverage:lcov": "npm run build && npx c8 --src src node --enable-source-maps --test"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.9",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@batono/core": "^0.0.5"
+  }
+}
