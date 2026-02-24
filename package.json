@@ -1,6 +1,6 @@
 {
   "name": "@batono/ui",
-  "version": "0.0.13",
+  "version": "0.0.13-alpha.1",
   "description": "UI primitives for the Batono server-driven interaction protocol.",
   "license": "MIT",
   "author": "Pascal Pfeifer <pascal@pfeifer.zone>",
@@ -45,7 +45,8 @@
     "node": ">=18"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "tag": "alpha"
   },
   "scripts": {
     "prepublishOnly": "npm test",
