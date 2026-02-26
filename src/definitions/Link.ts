@@ -12,8 +12,7 @@ export class Link implements IBuildable<LinkResult> {
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): LinkResult {
-    return buildDefinition(interactionGraph, {
-      type: 'link' as const,
+    return buildDefinition(interactionGraph, 'link', {
       content: this.#content,
       action: this.#action[__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph)
     })

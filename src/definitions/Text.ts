@@ -11,8 +11,7 @@ export class Text implements IBuildable {
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): TextResult {
-    return buildDefinition(interactionGraph, {
-      type: 'text' as const,
+    return buildDefinition(interactionGraph, 'text', {
       content: this.#content
     })
   }

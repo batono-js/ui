@@ -1,5 +1,5 @@
 import type {ActionResult, ActionsResult} from "../types/results.js";
-import { type IBuildable, type IInteractionGraph} from "@batono/core";
+import {type IBuildable, type IInteractionGraph} from "@batono/core";
 import {__BATONO_INTERNAL_BUILD_SYMBOL, buildDefinition} from "@batono/core/internal";
 
 export class ActionButtons implements IBuildable<ActionsResult> {
@@ -10,8 +10,7 @@ export class ActionButtons implements IBuildable<ActionsResult> {
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): ActionsResult {
-    return buildDefinition(interactionGraph, {
-      type: 'actions' as const,
+    return buildDefinition(interactionGraph, 'actions', {
       items: this.#items.map(item => item[__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph))
     })
   }

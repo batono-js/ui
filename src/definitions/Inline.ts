@@ -10,8 +10,7 @@ export class Inline implements IBuildable {
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): InlineResult {
-    return buildDefinition(interactionGraph, {
-      type: 'inline' as const,
+    return buildDefinition(interactionGraph, 'inline', {
       items: this.#items.map(item => item[__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph))
     })
   }

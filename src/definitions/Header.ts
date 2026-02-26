@@ -37,8 +37,7 @@ export class Header implements IBuildable<HeaderResult> {
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): HeaderResult {
-    return buildDefinition(interactionGraph, {
-      type: 'header' as const,
+    return buildDefinition(interactionGraph,'header', {
       title: this.#title,
       avatar: this.#avatar,
       subtitle: this.#subtitle?.[__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph),

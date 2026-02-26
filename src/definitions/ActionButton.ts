@@ -19,8 +19,7 @@ export class ActionButton implements IBuildable<ActionResult> {
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): ActionResult {
-    return buildDefinition(interactionGraph, {
-      type: 'action' as const,
+    return buildDefinition(interactionGraph, 'action', {
       label: this.#label,
       variant: this.#variant,
       action: this.#action?.[__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph),

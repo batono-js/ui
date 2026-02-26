@@ -12,8 +12,7 @@ export class Stat implements IBuildable {
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): StatResult {
-    return buildDefinition(interactionGraph, {
-      type: 'stat' as const,
+    return buildDefinition(interactionGraph,'stat', {
       content: this.#content,
       label: this.#label
     })

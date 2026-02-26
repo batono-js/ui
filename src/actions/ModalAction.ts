@@ -16,8 +16,7 @@ export class ModalAction implements IActionDefinition<ModalAction, ModalActionRe
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): ModalActionResult {
-    return buildDefinition(interactionGraph, {
-      type: 'modal' as const,
+    return buildDefinition(interactionGraph, 'modal', {
       title: this.#title,
       payload: this.#payload,
     })

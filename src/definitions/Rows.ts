@@ -10,8 +10,7 @@ export class Rows implements IBuildable {
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): RowsResult {
-    return buildDefinition(interactionGraph, {
-      type: 'rows' as const,
+    return buildDefinition(interactionGraph, 'rows', {
       items: this.#items.map(item => item[__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph))
     })
   }

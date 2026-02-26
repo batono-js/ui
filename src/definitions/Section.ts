@@ -31,8 +31,7 @@ export class Section implements IBuildable<SectionResult> {
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): SectionResult {
-    return buildDefinition(interactionGraph, {
-      type: 'section' as const,
+    return buildDefinition(interactionGraph, 'section', {
       title: this.#title,
       icon: this.#icon,
       variant: this.#variant,

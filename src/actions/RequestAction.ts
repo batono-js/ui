@@ -20,8 +20,7 @@ export class RequestAction implements IActionDefinition<RequestAction, RequestAc
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): RequestActionResult {
-    return buildDefinition(interactionGraph, {
-      type: 'request' as const,
+    return buildDefinition(interactionGraph, 'request', {
       method: this.#method,
       url: this.#url,
       payload: this.#payload,

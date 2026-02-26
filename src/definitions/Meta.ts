@@ -29,8 +29,7 @@ export class Meta implements IBuildable<MetaResult> {
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): MetaResult {
-    return buildDefinition(interactionGraph, {
-      type: 'meta' as const,
+    return buildDefinition(interactionGraph, 'meta', {
       content: this.#content,
       label: this.#label,
       icon: this.#icon,

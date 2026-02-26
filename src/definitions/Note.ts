@@ -16,8 +16,7 @@ export class Note implements IBuildable<NoteResult> {
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): NoteResult {
-    return buildDefinition(interactionGraph, {
-      type: 'note' as const,
+    return buildDefinition(interactionGraph, 'note', {
       content: this.#content,
       author: this.#author,
       timestamp: this.#timestamp,

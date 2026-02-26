@@ -22,8 +22,7 @@ export class Field implements IBuildable {
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): FieldResult {
-    return buildDefinition(interactionGraph, {
-      type: 'field' as const,
+    return buildDefinition(interactionGraph,'field', {
       label: this.#label,
       value: this.#value?.[__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph) ?? null,
       variant: this.#variant,

@@ -3,64 +3,64 @@ import type {HttpMethod} from "../actions/RequestAction.js";
 import type {ActionReferenceResult, Defined} from "@batono/core";
 
 export interface TextResult extends Defined {
-  type: 'text'
+  $type: 'text'
   content: string
 }
 
 export interface LinkResult extends Defined {
-  type: 'link'
+  $type: 'link'
   content: string
   action: ActionReferenceResult
 }
 
 export interface StatResult extends Defined {
-  type: 'stat'
+  $type: 'stat'
   label: string
   content: string
 }
 
 export interface ActionResult extends Defined {
-  type: 'action'
+  $type: 'action'
   label: string
   variant?: RenderVariant | undefined  // SPÄTER: string für jetzt
   action?: ActionReferenceResult | undefined
 }
 
 export interface ActionsResult extends Defined {
-  type: 'actions'
+  $type: 'actions'
   items: ActionResult[]
 }
 
 export interface InlineResult extends Defined {
-  type: 'inline'
+  $type: 'inline'
   items: Defined[]
 }
 
 export interface RowResult extends Defined {
-  type: 'row'
+  $type: 'row'
   items: Defined[]
 }
 
 export interface RowsResult extends Defined {
-  type: 'rows'
+  $type: 'rows'
   items: RowResult[]
 }
 
 export interface RequestActionResult extends Defined {
-  type: 'request'
+  $type: 'request'
   method: HttpMethod
   url: string
   payload?: Record<string, unknown> | undefined
 }
 
 export interface ModalActionResult extends Defined {
-  type: 'modal'
+  $type: 'modal'
   title: string
   payload?: Record<string, unknown> | undefined
 }
 
 export interface MetaResult extends Defined {
-  type: 'meta'
+  $type: 'meta'
   content: string | null
   label?: string | undefined
   icon?: string | undefined
@@ -68,14 +68,14 @@ export interface MetaResult extends Defined {
 }
 
 export interface FieldResult extends Defined {
-  type: 'field'
+  $type: 'field'
   label: string
   value: Defined | null
   variant?: RenderVariant | undefined  // SPÄTER: string für jetzt
 }
 
 export interface NoteResult extends Defined {
-  type: 'note'
+  $type: 'note'
   content: string
   author: string
   timestamp: string
@@ -83,7 +83,7 @@ export interface NoteResult extends Defined {
 }
 
 export interface HeaderResult extends Defined {
-  type: 'header'
+  $type: 'header'
   title: string
   avatar?: string | undefined
   subtitle?: InlineResult | undefined
@@ -91,7 +91,7 @@ export interface HeaderResult extends Defined {
 }
 
 export interface SectionResult extends Defined {
-  type: 'section'
+  $type: 'section'
   title: string
   icon?: string | undefined
   variant?: RenderVariant | undefined  // SPÄTER: string für jetzt
