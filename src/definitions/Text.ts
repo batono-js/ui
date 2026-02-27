@@ -1,6 +1,10 @@
 import {__BATONO_INTERNAL_BUILD_SYMBOL, buildDefinition} from "@batono/core/internal";
-import {type IBuildable, type IInteractionGraph} from "@batono/core";
-import type {TextResult} from "../types/results.js";
+import {type Defined, type IBuildable, type IInteractionGraph} from "@batono/core";
+
+export interface TextResult extends Defined {
+  $type: 'text'
+  content: string
+}
 
 export class Text implements IBuildable {
 

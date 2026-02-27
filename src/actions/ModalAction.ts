@@ -1,23 +1,28 @@
-import {type IActionDefinition, type IInteractionGraph} from "@batono/core";
-import type {ModalActionResult} from "../types/results.js";
+import {type Defined, type IActionDefinition, type IInteractionGraph} from "@batono/core";
 import {__BATONO_INTERNAL_BUILD_SYMBOL, buildDefinition} from "@batono/core/internal";
 
+export interface ModalActionResult extends Defined {
+  $type: 'modal'
+  modal: string
+  payload?: Record<string, unknown> | undefined
+}
+
 export class ModalAction implements IActionDefinition<ModalAction, ModalActionResult> {
-  readonly #title: string
+  readonly #modal: string
   readonly #payload?: Record<string, unknown>
 
-  constructor(title: string, payload?: Record<string, unknown>) {
-    this.#title = title
+  constructor(modal: string, payload?: Record<string, unknown>) {
+    this.#modal = modal
     if (payload) this.#payload = payload
   }
 
   withPayload(payload: Record<string, unknown>): ModalAction {
-    return new ModalAction(this.#title, payload)
+    return new ModalAction(this.#modal, payload)
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): ModalActionResult {
     return buildDefinition(interactionGraph, 'modal', {
-      title: this.#title,
+      modal: this.#modal,
       payload: this.#payload,
     })
   }

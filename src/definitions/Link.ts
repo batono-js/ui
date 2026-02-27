@@ -1,20 +1,35 @@
-import type {LinkResult} from "../types/results.js";
 import {__BATONO_INTERNAL_BUILD_SYMBOL, buildDefinition} from "@batono/core/internal";
-import {type IBuildable, type IDefinedAction, type IInteractionGraph} from "@batono/core";
+import {type Defined, type IBuildable, type IInteractionGraph} from "@batono/core";
+import type {HtmlTarget} from "../types/types.js";
 
-export class Link implements IBuildable<LinkResult> {
-  readonly #content: string
-  readonly #action: IDefinedAction
 
-  constructor(content: string, action: IDefinedAction) {
-    this.#content = content
-    this.#action = action
+export interface LinkResult extends Defined {
+  $type: 'link'
+  label: string
+  href: string
+  target?: HtmlTarget | undefined
+}
+
+export class Link implements IBuildable {
+  readonly #label: string
+  readonly #href: string
+  readonly #target?: HtmlTarget
+
+  constructor(label: string, href: string, target?: HtmlTarget) {
+    this.#label = label
+    this.#href = href
+    if (target) this.#target = target
+  }
+
+  withTarget(target: HtmlTarget): Link {
+    return new Link(this.#label, this.#href, target)
   }
 
   [__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph: IInteractionGraph): LinkResult {
     return buildDefinition(interactionGraph, 'link', {
-      content: this.#content,
-      action: this.#action[__BATONO_INTERNAL_BUILD_SYMBOL](interactionGraph)
+      label: this.#label,
+      href: this.#href,
+      target: this.#target,
     })
   }
 }

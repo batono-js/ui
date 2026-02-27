@@ -8,19 +8,20 @@
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
 [![codecov](https://codecov.io/gh/batono-js/ui/branch/main/graph/badge.svg)](https://codecov.io/gh/batono-js/ui)
 
-`@batono/ui` provides the UI building blocks for the Batono protocol — layout containers, content definitions, and
-action primitives. It builds on top of `@batono/core` and is designed to be used together with it.
+`@batono/ui` provides the standard UI building blocks for the Batono protocol — layout containers, content primitives,
+and action definitions. It builds on top of `@batono/core` and is designed to be used together with it.
 
 ---
 
 ## Features
 
 - ✅ Peer dependency on `@batono/core` only
-- ✅ Fully composable layout system (`rows`, `row`, `inline`)
-- ✅ Rich content definitions (`header`, `section`, `field`, `meta`, `note`, `stat`)
-- ✅ Fluent builder API with method chaining
+- ✅ Layout primitives (`rows`, `row`)
+- ✅ Content primitives (`text`, `link`, `image`, `icon`, `button`, `divider`)
+- ✅ Action definitions (`request`, `navigate`, `modal`, `event`)
+- ✅ Escape hatch for custom nodes (`custom`)
 - ✅ Typed result interfaces for frontend renderers
-- ✅ String shorthand for field values — auto-wrapped in `Text`
+- ✅ Fully typed with TypeScript
 
 ---
 
@@ -35,36 +36,17 @@ npm install @batono/ui @batono/core
 ## Basic Usage
 
 ```ts
-import {bt as btCore} from '@batono/core'
-import {bt} from '@batono/ui'
+import {bt} from '@batono/core'
+import {bt as btUi} from '@batono/ui'
 
-const openProfile = btCore.defineAction(
-  bt.request('GET', '/customers/42')
+const deleteUser = bt.defineFlow(
+  btUi.request('DELETE', '/users/42')
 )
 
-const graph = btCore.graph(
-  bt.rows(
-    bt.row(
-      bt.header('Batman Forever', {
-        avatar: 'BF',
-        subtitle: bt.inline(
-          bt.link('Bruno Labbadia', openProfile),
-          bt.text(' · '),
-          bt.text('K2602206207')
-        )
-      })
-    ),
-    bt.row(
-      bt.section('Personal Data', bt.rows(
-        bt.row(
-          bt.field('First Name', 'Batman'),
-          bt.field('Last Name', 'Forever')
-        ),
-        bt.row(
-          bt.field('Email', null),
-          bt.field('Phone', null)
-        )
-      ))
+const graph = bt.graph(
+  btUi.rows(
+    btUi.row(
+      btUi.button('Delete User', deleteUser)
     )
   )
 )
@@ -76,192 +58,174 @@ res.json(graph)
 
 ## Layout
 
-### `rows` / `row`
+### `rows`
 
-The primary layout system. `rows` is a vertical stack of `row` containers. Each `row` distributes its children
-horizontally with equal width.
+A vertical stack of items.
 
 ```ts
-bt.rows(
-  bt.row(bt.field('First Name', 'Batman'), bt.field('Last Name', 'Forever')),
-  bt.row(bt.field('Email', null))
+btUi.rows(
+  btUi.row(btUi.text('First')),
+  btUi.row(btUi.text('Second'))
 )
 ```
 
-### `inline`
-
-A horizontal container without grid spacing — for composing inline content like subtitles.
+Accepts an optional `RowsOptions` as first argument:
 
 ```ts
-bt.inline(
-  bt.link('Parent', openParent),
-  bt.text(' · '),
-  bt.text('K2602206207')
+btUi.rows({gap: 8}, btUi.row(...), btUi.row(...))
+```
+
+| Option  | Type                                    | Description                    |
+|---------|-----------------------------------------|--------------------------------|
+| `gap`   | `number`                                | Spacing between items          |
+| `align` | `'start' \| 'center' \| 'end' \| 'stretch'` | Horizontal alignment of items  |
+
+### `row`
+
+A horizontal container.
+
+```ts
+btUi.row(btUi.text('Left'), btUi.text('Right'))
+```
+
+Accepts an optional `RowOptions` as first argument:
+
+```ts
+btUi.row({gap: 8, wrap: true}, btUi.text('A'), btUi.text('B'))
+```
+
+| Option  | Type                                    | Description                    |
+|---------|-----------------------------------------|--------------------------------|
+| `gap`   | `number`                                | Spacing between items          |
+| `align` | `'start' \| 'center' \| 'end' \| 'stretch'` | Alignment of items             |
+| `wrap`  | `boolean`                               | Allow items to wrap            |
+
+Both `rows` and `row` support `when` for conditional items:
+
+```ts
+import {when} from '@batono/core'
+
+btUi.rows(
+  btUi.row(btUi.text('Always')),
+  when(user.isAdmin, btUi.row(btUi.text('Admin only')))
 )
 ```
 
 ---
 
-## Definitions
+## Content Primitives
 
-### `header`
-
-Page-level header with avatar, subtitle and actions.
+### `text`
 
 ```ts
-bt.header('Batman Forever', {
-  avatar: 'BF',
-  subtitle: bt.inline(bt.text('Student')),
-  actions: bt.actionButtons(
-    bt.action('+ Book Unit', bookUnit, {variant: 'primary'})
-  )
-})
+btUi.text('Hello world')
 ```
 
-### `section`
-
-A card container with a title, optional icon, actions and a rows layout.
+### `link`
 
 ```ts
-bt.section('Personal Data', bt.rows(
-  bt.row(bt.field('First Name', 'Batman'))
-))
-  .withIcon('🧑')
-  .withVariant('accent')
-  .withActions(bt.actionButtons(
-    bt.action('Edit', editAction)
-  ))
+btUi.link('Open Profile', '/profile/42')
+btUi.link('Open in new tab', '/profile/42', '_blank')
 ```
 
-### `field`
-
-A labeled value. Accepts a string shorthand — automatically wrapped in `Text`.
+### `image`
 
 ```ts
-bt.field('First Name', 'Batman')
-bt.field('Newsletter', 'Yes', 'bool-true')
-bt.field('Email', null)  // renders as empty
-bt.field('ID', bt.inline(bt.text('NJkR7'), bt.text(' (obfuscated)')))
+btUi.image('/avatar.png', 'User avatar')
+btUi.image('/avatar.png', 'User avatar', {width: 64, height: 64})
 ```
 
-### `meta`
-
-A compact chip or badge for metadata display.
+### `icon`
 
 ```ts
-bt.meta('89544').withLabel('ID').withIcon('🆔')
-bt.meta('New Customer').withVariant('badge-green')
-bt.meta('Student').withVariant('badge-accent')
+btUi.icon('trash')
+btUi.icon('trash', {width: 24, height: 24})
+btUi.icon('trash', undefined, {color: 'red', variant: 'outline'})
 ```
 
-### `stat`
-
-A large metric display for key numbers.
+### `button`
 
 ```ts
-bt.stat('Available Units', '99.0')
-bt.stat('Available (HH:mm)', '74:15')
+btUi.button('Delete', deleteFlow)
+btUi.button('Delete', deleteFlow, {variant: 'ghost', disabled: false})
 ```
 
-### `note`
-
-A timestamped note with author and optional actions.
+### `divider`
 
 ```ts
-bt.note(
-  'Student mentioned difficulties in analysis.',
-  'Maria K.',
-  '2026-02-12T11:15:00',
-  bt.actionButtons(
-    bt.action('✕', deleteNote, {variant: 'ghost'})
-  )
-)
+btUi.divider()
 ```
 
-### `text` / `link`
+### `custom`
 
-Inline content primitives.
+Escape hatch for renderer-specific nodes not covered by the standard primitives.
 
 ```ts
-bt.text('Some text')
-bt.link('Open Profile', openProfileAction)
+btUi.custom('my-special-widget', {foo: 'bar'})
 ```
 
 ---
 
 ## Actions
 
+Action definitions are passed to `bt.defineFlow()` from `@batono/core`.
+
 ### `request`
 
-An HTTP action definition.
+```ts
+btUi.request('POST', '/bookings')
+btUi.request('DELETE', '/users/42').withPayload({id: 42})
+btUi.request('POST', '/bookings', {id: 1}, {headers: {'X-Token': 'abc'}, timeout: 5000})
+```
+
+### `navigate`
 
 ```ts
-bt.request('POST', '/bookings')
-bt.request('DELETE', '/users/42').withPayload({id: 42})
+btUi.navigate('/dashboard')
+btUi.navigate('/profile/42', {id: 42}, {target: '_blank'})
 ```
 
 ### `modal`
 
-A modal dialog action.
-
 ```ts
-bt.modal('Are you sure?')
+btUi.modal('confirm-delete')
+btUi.modal('confirm-delete').withPayload({id: 42})
 ```
 
-### `actionButtons`
+### `event`
 
-A container for `action` buttons, used in `header` and `section`.
+A generic custom event — handled by the renderer.
 
 ```ts
-bt.actionButtons(
-  bt.action('+ Book Unit', bookUnit, {variant: 'primary'}),
-  bt.action('+ Note', addNote, {variant: 'secondary'})
-)
+btUi.event('user:selected')
+btUi.event('user:selected', {id: 42})
 ```
-
----
-
-## Variants
-
-`RenderVariant` is used on `field`, `meta`, `section` and `action` to signal visual intent to the renderer.
-
-| Variant        | Usage                       |
-|----------------|-----------------------------|
-| `primary`      | Primary action button       |
-| `secondary`    | Secondary action button     |
-| `ghost`        | Subtle/destructive action   |
-| `mono`         | Monospace text (IDs, codes) |
-| `bool-true`    | Positive boolean value      |
-| `bool-false`   | Negative boolean value      |
-| `badge-green`  | Success/positive badge      |
-| `badge-accent` | Highlighted badge           |
-| `accent`       | Highlighted section         |
 
 ---
 
 ## Frontend Types
 
-`@batono/ui` exports typed result interfaces for frontend renderers — no dependency on build-time classes needed.
+`@batono/ui` exports typed result interfaces for frontend renderers:
 
 ```ts
 import type {
-  HeaderResult,
-  SectionResult,
-  FieldResult,
   RowsResult,
-  Defined
+  RowResult,
+  TextResult,
+  LinkResult,
+  ImageResult,
+  IconResult,
+  ButtonResult,
+  DividerResult,
+  CustomResult,
+  RequestActionResult,
+  NavigateActionResult,
+  ModalActionResult,
+  EventActionResult,
 } from '@batono/ui'
 ```
 
-All result types extend `Defined` from `@batono/core`:
-
-```ts
-interface Defined {
-  $schema: string
-  $graph: string
-  type: string
-}
-```
+All result types extend `Defined` from `@batono/core` and carry a `$type` discriminator for exhaustive switch rendering.
 
 ---
 
@@ -270,18 +234,17 @@ interface Defined {
 ```ts
 import {NBSP} from '@batono/ui'
 
-bt.text(`${NBSP}·${NBSP}`) // non-breaking space separator
+btUi.text(`${NBSP}·${NBSP}`) // non-breaking space separator
 ```
 
 ---
 
 ## Design Goals
 
-- **Semantic over generic** — `header`, `section`, `field` express intent, not just structure
-- **Fluent API** — method chaining for optional properties keeps constructors clean
+- **Minimal by default** — standard primitives only, no framework opinions
+- **Extensible** — use `custom` for anything not covered, or implement `IBuildable` directly
 - **Frontend-agnostic** — result interfaces work with any renderer (Vue, React, vanilla)
 - **Composable** — every definition is an `IBuildable`, freely nestable
-- **Renderer-friendly** — `type` discriminator on every node enables exhaustive switch rendering
 
 ---
 

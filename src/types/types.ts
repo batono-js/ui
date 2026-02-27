@@ -1,10 +1,8 @@
-export type RenderVariant =
-  | 'primary'
-  | 'secondary'
-  | 'ghost'
-  | 'mono'
-  | 'bool-true'
-  | 'bool-false'
-  | 'badge-green'
-  | 'badge-accent'
-  | 'accent'
+export type HtmlTarget = '_self' | '_blank' | '_parent' | '_top'
+
+export interface ImageSize {
+  width?: number
+  height?: number
+}
+
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
