@@ -1,6 +1,6 @@
 {
   "name": "@batono/ui",
-  "version": "0.0.20-alpha.2",
+  "version": "0.0.32",
   "description": "UI primitives for the Batono server-driven interaction protocol.",
   "license": "MIT",
   "author": "Pascal Pfeifer <pascal@pfeifer.zone>",
@@ -46,7 +46,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "tag": "alpha"
+    "registry": "https://registry.npmjs.org"
   },
   "scripts": {
     "prepublishOnly": "npm test",
@@ -62,6 +62,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@batono/core": "alpha"
+    "@batono/core": "*"
   }
 }
